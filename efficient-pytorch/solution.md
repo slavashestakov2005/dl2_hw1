@@ -32,3 +32,7 @@ x_out = w * torch.bmm(mask, x_emb) + self.dense_expand.bias.unsqueeze(0).unsquee
 ![Решение](solve.png)
 
 Правда на обучении лучше только в раз 10, получается зря старался
+
+Увеличил батч сайз до 32 - итого ускорение в 30 раз относительно старта.
+
+![Batch size 32](bs_32.png)

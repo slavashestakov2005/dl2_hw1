@@ -113,7 +113,7 @@ def main_solve():
     device = torch.device('cuda:0')
     model.to(device)
 
-    train_dl = torch.utils.data.DataLoader(train_dataset, num_workers=0, batch_size=8, shuffle=True)
+    train_dl = torch.utils.data.DataLoader(train_dataset, num_workers=0, batch_size=32, shuffle=True)
     val_dl = torch.utils.data.DataLoader(val_dataset, num_workers=0, batch_size=1024)
     optimizer = torch.optim.AdamW(model.parameters(), lr=3e-4, weight_decay=1e-5)
 
@@ -144,7 +144,7 @@ def main_solve():
             print('>>>\n')
 
     torch.seed(123)
-    x = torch.randn(8, train_dataset.tensors[0].shape[1], device=device)
+    x = torch.randn(32, train_dataset.tensors[0].shape[1], device=device)
     N = 100
 
     # warm up
