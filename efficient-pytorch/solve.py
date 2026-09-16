@@ -50,8 +50,8 @@ class TromptCell(nn.Module):
         x_column = self.ln_col(self.emb_column.unsqueeze(0).repeat(x_emb.shape[0], 1, 1))
         mask = torch.softmax(x_prompt @ x_column.transpose(1,2), dim=-1)
 
-        x_emb = x_emb.unsqueeze(1) + self.dense_expand(x_emb.unsqueeze(-1)).permute(0, 3, 1, 2)
-        x_out = (mask.unsqueeze(-1) * x_emb).sum(dim=2)
+        w = (1 + self.dense_expand.weight.squeeze(-1)).unsqueeze(0).unsqueeze(-1)
+        x_out = w * torch.bmm(mask, x_emb) + self.dense_expand.bias.unsqueeze(0).unsqueeze(-1)
         return x_out
 
 
@@ -99,7 +99,7 @@ def load_from_url(url, cache_dir='.'):
 TRAIN_DATA = "https://huggingface.co/datasets/puhsu/hw01-data/resolve/main/train_dataset.pt"
 VAL_DATA = "https://huggingface.co/datasets/puhsu/hw01-data/resolve/main/val_dataset.pt"
 
-def main_train():
+def main_solve():
     torch.manual_seed(0)
     
     train_dataset = torch.utils.data.TensorDataset(*map(torch.nan_to_num, load_from_url(TRAIN_DATA)))
